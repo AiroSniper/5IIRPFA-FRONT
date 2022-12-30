@@ -1,0 +1,279 @@
+<!--pitchs.component.hmtl-->
+
+<div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+        <!-- content-header component -->
+        <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+        <!-- Basic Alerts start -->
+        <section id="home-page">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Pitchs</h4>
+                        </div>
+                        <div class="card-body pb-1">
+                            <form class="form">
+                                <div class="row">
+
+                                    <div class="col-md-11 col-12">
+
+                                    </div>
+                                    <div class="col-md-1 col-12">
+                                        <button type="button" (click)="modalOpen(modalBasic)" rippleEffect
+                                            class="btn btn-outline-success w-100"><i data-feather="plus"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- App Design Card -->
+                <div *ngFor="let c of clubs" class="col-lg-6 col-md-6 col-12">
+                    <div class="card card-app-design" *ngIf="c">
+                        <div class="card-body">
+                            <div class="badge badge-light-primary">CLUB</div>
+                            <h4 class="card-title mt-1 mb-75">{{c.name}}</h4>
+                            <p class="card-text font-small-2 mb-2">
+                                {{c.description}}
+                            </p>
+                            <div class="design-group">
+                                <h6 class="section-label">Stads</h6>
+                                <a class="badge badge-primary mr-1 mb-1" (click)="modalOpen2(modalBasic2,s)"
+                                    style="width: 100px; color: white;" *ngFor="let s of c.stads">{{s.name}}</a>
+                            </div>
+
+                            <div class="media mt-2">
+                                <div class="avatar bg-light-primary rounded mr-1">
+                                    <div class="avatar-content">
+                                        <i data-feather="map-pin" class="avatar-icon font-medium-3"></i>
+                                    </div>
+                                </div>
+                                <div class="media-body">
+                                    <h6 class="mb-0">{{c.city}}</h6>
+                                    <small>{{c.zipCode}}, {{c.adress}}</small>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-6"> <button type="button" class="btn btn-primary btn-block"
+                                        rippleEffect>View</button></div>
+                                <div class="col-6"><button type="button" class="btn btn-primary btn-block"
+                                        (click)="modalOpen1(modalBasic1,c)" rippleEffect>Add Stad</button></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/ App Design Card -->
+            </div>
+        </section>
+        <!-- Basic Alerts end -->
+    </div>
+</div>
+<!-- Modal -->
+<ng-template #modalBasic let-modal>
+
+    <form [formGroup]="pitchForm" (ngSubmit)="onSubmit()">
+        <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel1">Create Club</h4>
+            <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" tabindex="0" ngbAutofocus>
+
+            <div class="form">
+                <div class="row">
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" formControlName="name" class="form-control"
+                                placeholder="Name" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <select id="city" formControlName="city" class="form-control">
+                                <option *ngFor="let city of this.cities" value="{{city.name}}">{{city.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label for="zip">Zip Code</label>
+                            <input type="text" id="zip" formControlName="zip" class="form-control"
+                                placeholder="Zip Code" />
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label for="adress">Adress</label>
+                            <input type="text" id="adress" formControlName="adress" class="form-control"
+                                placeholder="Adress" />
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-12">
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone" formControlName="phone" class="form-control"
+                                placeholder="05xxxxxxxx" />
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-12">
+                        <div class="form-group">
+                            <label for="desc">Description</label>
+                            <textarea id="desc" class="form-control" formControlName="desc" cols="30" rows="1"
+                                placeholder="Description"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="!pitchForm.valid"
+                (click)="modal.close('Accept click')" rippleEffect>
+                Create
+            </button>
+        </div>
+    </form>
+</ng-template>
+
+
+
+<ng-template #modalBasic1 let-modal>
+
+    <form [formGroup]="stadForm" (ngSubmit)="onSubmit1()">
+        <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel1">Add Stad</h4>
+            <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" tabindex="0" ngbAutofocus>
+
+            <div class="form">
+                <div class="row">
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" formControlName="name" class="form-control"
+                                placeholder="Name" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label for="type">Type</label>
+                            <select id="type" formControlName="type" class="form-control">
+                                <option value="Gazo">Gazo</option>
+                                <option value="Dsisa">Dsisa</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label for="price">Price Per Player</label>
+                            <input type="number" id="price" min="10" formControlName="price" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label for="capacity">Capacity Per Team</label>
+                            <select id="capacity" formControlName="capacity" class="form-control">
+                                <option value="5">5 Players</option>
+                                <option value="6">6 Players</option>
+                                <option value="7">7 Players</option>
+                                <option value="11">11 Players</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-12">
+                        <div class="form-group">
+                            <label for="desc">Description</label>
+                            <textarea id="desc" class="form-control" formControlName="desc" cols="30" rows="1"
+                                placeholder="Description"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="!stadForm.valid"
+                (click)="modal.close('Accept click')" rippleEffect>
+                Add
+            </button>
+        </div>
+    </form>
+</ng-template>
+
+
+
+
+<ng-template #modalBasic2 let-modal>
+
+    <form>
+        <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel1">Stad Details</h4>
+            <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" tabindex="0" ngbAutofocus>
+
+            <div class="col-lg-12 col-md-6 col-12">
+                <div class="" *ngIf="currentStad">
+                    <div class="card-body">
+                      
+                        <h4 class="card-title mt-1 mb-75"> <span class="section-label">Stad Name : </span> {{currentStad.name}}</h4>
+                        <p class="card-text font-small-2 mb-2">
+                            <span class="section-label">Stad Description : </span> {{currentStad.description}}
+                        </p>
+                        <div class="mt-4 w-100">
+                            <h6 class="section-label">Bookings</h6>
+                            <div class="table-responsive w-100">
+                                <table class="table w-100">
+                                  <thead>
+                                    <tr>
+                                      <th>Time</th>
+                                      <th>Action</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr *ngFor="let b of bookings">
+                                        <td>{{b.time}}</td>
+                                        <td><button class="btn btn-success"><i data-feather="check"></i></button></td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="media mt-4">
+                            <div class="avatar bg-light-primary rounded mr-1">
+                                <div class="avatar-content">
+                                    <i data-feather="calendar" class="avatar-icon font-medium-3"></i>
+                                </div>
+                            </div>
+                            <div class="media-body">
+                               <input type="date" (change)="getDate($event)" class="form-control">
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="modal.close('Accept click')" rippleEffect>
+                Close
+            </button>
+        </div>
+    </form>
+</ng-template>
+<!-- / Modal -->
