@@ -1,1 +1,218 @@
-<!--hb-->
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <!-- content-header component -->
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+    <!-- Basic Alerts start -->
+    <section id="sample-page">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title">Rooms</h4>
+            </div>
+            <div class="card-body pb-1">
+
+              <form class="form">
+                <div class="row">
+                  <div class="col-md-5 col-12">
+                    <div class="form-group">
+                      <select id="cityR" class="form-control">
+                        <option *ngFor="let city of this.cities" value="{{city.name}}">{{city.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-5 col-12">
+                    <div class="form-group">
+                      <input type="text" id="zoneR" class="form-control" placeholder="Select Zone" />
+                    </div>
+                  </div>
+                  <div class="col-md-1 col-12 mb-1">
+                    <button type="button" rippleEffect class="btn btn-primary w-100"><i
+                        data-feather="search"></i></button>
+
+                  </div>
+                  <div class="col-md-1 col-12">
+                    <button type="button" (click)="modalOpen(modalBasic)" rippleEffect
+                      class="btn btn-outline-success w-100"><i data-feather="plus"></i></button>
+                  </div>
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-12" *ngFor="let r of rooms">
+          <div class="card card-developer-meetup">
+
+            <div class="card-body">
+
+              <div class="meetup-header d-flex align-items-center">
+                <div class="meetup-day">
+                  <h6 class="mb-0 mb-1" *ngIf="currentPlayer && r.owner!==currentPlayer._id"> <span
+                      class="text-primary"><i data-feather="user"></i> Plyer</span></h6>
+                  <h6 class="mb-0 mb-1" *ngIf="currentPlayer && r.owner===currentPlayer._id"> <span
+                      class="text-success"><i data-feather="shield"></i> Owner</span></h6>
+                  <h3 class="mb-0">{{r.type}}</h3>
+                  <h6 class="mb-0">Players</h6>
+                  <h6 class="mb-0">Room</h6>
+
+
+                </div>
+
+                <div class="my-auto">
+
+                  <h4 class="card-title mb-25">{{r.title}}</h4>
+                  <p class="card-text mb-0">{{r.description.toLowerCase()}}</p>
+                </div>
+
+              </div>
+              <div class="media">
+                <div class="avatar bg-light-primary rounded mr-1">
+                  <div class="avatar-content">
+                    <i data-feather="users" class="avatar-icon font-medium-3"></i>
+                  </div>
+                </div>
+                <div class="media-body">
+                  <h6 class="mb-0">{{ r.teams[0].players.length + r.teams[1].players.length }} Player(s) In Room</h6>
+                  <small>Max {{r.type * 2}}</small>
+                </div>
+              </div>
+              <div class="media">
+                <div class="avatar bg-light-primary rounded mr-1">
+                  <div class="avatar-content">
+                    <i data-feather="calendar" class="avatar-icon font-medium-3"></i>
+                  </div>
+                </div>
+                <div class="media-body">
+                  <h6 class="mb-0">{{r.date | date}}</h6>
+                  <small >At {{r.time}}</small>
+                </div>
+              </div>
+              <div class="media">
+                <div class="avatar bg-light-primary rounded mr-1">
+                  <div class="avatar-content">
+                    <i data-feather="map-pin" class="avatar-icon font-medium-3"></i>
+                  </div>
+                </div>
+                <div class="media-body">
+                  <h6 class="mb-0">Central Park</h6>
+                  <small>{{r.city}}, {{r.zone}}</small>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <div class="div">
+
+                  </div>
+                  <div class="avatar-group">
+                    <div class="div" *ngFor="let player of r.teams[0].players; let index=index;">
+                      <div *ngIf="index < 2" placement="bottom" container="body"
+                        ngbTooltip="{{player.firstName}} {{player.lastName}}" class="avatar pull-up">
+                        <img src="assets/images/avatars/player.png" alt="Avatar" width="33" height="33" />
+                      </div>
+                    </div>
+                    <div class="div" *ngFor="let player of r.teams[1].players; let index=index;">
+                      <div *ngIf="index < 2" placement="bottom" container="body"
+                        ngbTooltip="{{player.firstName}} {{player.lastName}}" class="avatar pull-up">
+                        <img src="assets/images/avatars/player.png" alt="Avatar" width="33" height="33" />
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+                <div class="col-6">
+                  <a [routerLink]="['/players',r._id]" class="btn btn-primary mt-2 mr-1 w-100"><i
+                      data-feather="eye"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </section>
+    <!-- Basic Alerts end -->
+  </div>
+</div>
+
+
+<!-- Modal -->
+<ng-template #modalBasic let-modal>
+
+  <form [formGroup]="roomForm" (ngSubmit)="onSubmit()">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel1">Create Room</h4>
+      <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+
+      <div class="form">
+        <div class="row">
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label for="title">Title</label>
+              <input type="text" id="title" formControlName="title" class="form-control" placeholder="Title" />
+            </div>
+          </div>
+
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label for="city">City</label>
+              <select id="city" formControlName="city" class="form-control">
+                <option *ngFor="let city of this.cities" value="{{city.name}}">{{city.name}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label for="zone">Zone</label>
+              <input type="text" id="zone" formControlName="zone" class="form-control" placeholder="Zone" />
+            </div>
+          </div>
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label for="type">Type</label>
+              <select id="type" formControlName="type" class="form-control">
+                <option value="5">5 Players Room</option>
+                <option value="6">6 Players Room</option>
+                <option value="7">7 Players Room</option>
+                <option value="11">11 Players Room</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label for="date">Date</label>
+              <input type="date" id="date" formControlName="date" class="form-control" />
+            </div>
+          </div>
+          <div class="col-md-6 col-12">
+            <div class="form-group">
+              <label for="time">Time</label>
+              <input type="time" id="time" formControlName="time" class="form-control" />
+            </div>
+          </div>
+          <div class="col-md-12 col-12">
+            <div class="form-group">
+              <label for="desc">Description</label>
+              <textarea id="desc" class="form-control" formControlName="desc" cols="30" rows="1"
+                placeholder="Description"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary" [disabled]="!roomForm.valid" (click)="modal.close('Accept click')" rippleEffect>
+        Create
+      </button>
+    </div>
+  </form>
+</ng-template>
+<!-- / Modal -->
