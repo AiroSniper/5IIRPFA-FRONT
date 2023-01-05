@@ -1,1 +1,335 @@
-<!--mn-->
+
+<!--room.component.html-->
+
+
+
+
+
+
+
+
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <!-- content-header component -->
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+    <!-- Basic Alerts start -->
+    <section id="home-page">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title">Room Details</h4>
+            </div>
+            <div class="card-body pb-1">
+              <form class="form">
+                <div class="row">
+
+                    <div class="col-md-8 col-12">
+
+                    </div>
+                    <div class="col-md-4 col-12">
+                        <button type="button" rippleEffect (click)="modalOpenXL(modalXL)"
+                            class="btn btn-success w-100"><i data-feather="bookmark"></i> Book A Pitch</button>
+                    </div>
+                </div>
+            </form>
+            </div>
+          </div>
+        </div>
+        <!-- Developer Meetup Card -->
+        <div class="col-lg-12 col-md-12 col-12">
+          <div class="card card-developer-meetup">
+
+            <div class="card-body">
+
+              <div class="meetup-header d-flex align-items-center">
+                <div class="meetup-day">
+                  <h6 class="mb-0 mb-1" *ngIf="currentPlayer && currentRoom.owner!==currentPlayer._id"> <span
+                      class="text-primary"><i data-feather="user"></i> Plyer</span></h6>
+                  <h6 class="mb-0 mb-1" *ngIf="currentPlayer && currentRoom.owner===currentPlayer._id"> <span
+                      class="text-success"><i data-feather="shield"></i> Owner</span></h6>
+                  <h3 class="mb-0">{{currentRoom.type}}</h3>
+                  <h6 class="mb-0">Players</h6>
+                  <h6 class="mb-0">Room</h6>
+
+
+                </div>
+
+                <div class="my-auto">
+
+                  <h4 class="card-title mb-25">{{currentRoom.title}}</h4>
+                  <p *ngIf="currentRoom.description" class="card-text mb-0">{{currentRoom.description.toLowerCase()}}</p>
+                </div>
+
+              </div>
+              <div class="media">
+                <div class="avatar bg-light-primary rounded mr-1">
+                  <div class="avatar-content">
+                    <i data-feather="users" class="avatar-icon font-medium-3"></i>
+                  </div>
+                </div>
+                <div class="media-body">
+                  <h6 *ngIf=" currentRoom.teams &&  currentRoom.teams[0].players &&  currentRoom.teams[1].players" class="mb-0">{{ currentRoom.teams[0].players.length + currentRoom.teams[1].players.length }} Player(s) In Room</h6>
+                  <small>Max {{currentRoom.type * 2}}</small>
+                </div>
+              </div>
+              <div class="media">
+                <div class="avatar bg-light-primary rounded mr-1">
+                  <div class="avatar-content">
+                    <i data-feather="calendar" class="avatar-icon font-medium-3"></i>
+                  </div>
+                </div>
+                <div class="media-body">
+                  <h6 class="mb-0">{{currentRoom.date | date}}</h6>
+                  <small >At {{currentRoom.time}}</small>
+                </div>
+              </div>
+              <div class="media">
+                <div class="avatar bg-light-primary rounded mr-1">
+                  <div class="avatar-content">
+                    <i data-feather="map-pin" class="avatar-icon font-medium-3"></i>
+                  </div>
+                </div>
+                <div class="media-body">
+                  <h6 class="mb-0">Not Sepicified</h6>
+                  <small>{{currentRoom.city}}, {{currentRoom.zone}}</small>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <div class="div">
+
+                  </div>
+                 <!-- <div class="avatar-group" *ngIf="currentRoom.teams">
+                    <div class="div" *ngFor="let player of currentRoom.teams[0].players; let index=index;">
+                      <div  placement="bottom" container="body"
+                        ngbTooltip="{{player.firstName}} {{player.lastName}}" class="avatar pull-up">
+                        <img src="assets/images/avatars/player.png" alt="Avatar" width="33" height="33" />
+                      </div>
+                    </div>
+                    <div class="div" *ngFor="let player of currentRoom.teams[1].players; let index=index;">
+                      <div  placement="bottom" container="body"
+                        ngbTooltip="{{player.firstName}} {{player.lastName}}" class="avatar pull-up">
+                        <img src="assets/images/avatars/player.png" alt="Avatar" width="33" height="33" />
+                      </div>
+                    </div>
+
+
+                  </div>-->
+                </div>
+                <div class="col-12 row">
+                  <div *ngIf="verify() && !isMax()" class="col-6">
+                    <a  (click)="onJoin(0)" class="btn btn-success mt-2 mr-1 w-100"><i
+                      data-feather="log-in"> </i> Team A</a>
+                  </div>
+                  <div *ngIf="verify() && !isMax()" class="col-6">
+                    <a  (click)="onJoin(1)" class="btn btn-success mt-2 w-100"><i
+                      data-feather="log-in"></i>  Team B</a>
+                  </div>
+                  
+                      
+                        <a *ngIf="!verify()" (click)="exit()" class="btn btn-danger mt-2 w-100"><i
+                          data-feather="log-out"> </i> Leave</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--/ Developer Meetup Card -->
+
+        <!-- Business Card -->
+        <div class="col-lg-6 col-md-6 col-12" *ngIf="currentPlayer && currentRoom.owner===currentPlayer._id">
+          <div class="card business-card">
+            <div class="card-header pb-1">
+              <h4 class="card-title">For Business Sharks</h4>
+              <i data-feather="more-vertical" class="font-medium-3 cursor-pointer"></i>
+            </div>
+            <div class="card-body">
+              <p class="card-text">
+                Here, i focus ona range of items and featured that we use in life without giving them
+              </p>
+              <h6 class="mb-75">Basic price is $130</h6>
+              <div class="business-items">
+                <div class="business-item">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="business-checkbox-1" />
+                      <label class="custom-control-label" for="business-checkbox-1">Option #1</label>
+                    </div>
+                    <div class="badge badge-light-success">+$39</div>
+                  </div>
+                </div>
+                <div class="business-item">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="business-checkbox-2" checked />
+                      <label class="custom-control-label" for="business-checkbox-2">Option #2</label>
+                    </div>
+                    <div class="badge badge-light-primary">+85</div>
+                  </div>
+                </div>
+                <div class="business-item">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="business-checkbox-3" />
+                      <label class="custom-control-label" for="business-checkbox-3">Option #3</label>
+                    </div>
+                    <div class="badge badge-light-success">+$199</div>
+                  </div>
+                </div>
+                <div class="business-item">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="business-checkbox-4" />
+                      <label class="custom-control-label" for="business-checkbox-4">Option #4</label>
+                    </div>
+                    <div class="badge badge-light-success">+$459</div>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-primary btn-block" rippleEffect>Purchase</button>
+            </div>
+          </div>
+        </div>
+        <!--/ Business Card -->
+
+        <!-- Business Card -->
+        <div class="col-lg-6 col-md-6 col-12" *ngIf="currentPlayer && currentRoom.owner===currentPlayer._id">
+          <div class="card business-card">
+            <div class="card-header pb-1">
+              <h4 class="card-title">For Business Sharks</h4>
+              <i data-feather="more-vertical" class="font-medium-3 cursor-pointer"></i>
+            </div>
+            <div class="card-body">
+              <p class="card-text">
+                Here, i focus ona range of items and featured that we use in life without giving them
+              </p>
+              <h6 class="mb-75">Basic price is $130</h6>
+              <div class="business-items">
+                <div class="business-item">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="business-checkbox-1" />
+                      <label class="custom-control-label" for="business-checkbox-1">Option #1</label>
+                    </div>
+                    <div class="badge badge-light-success">+$39</div>
+                  </div>
+                </div>
+                <div class="business-item">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="business-checkbox-2" checked />
+                      <label class="custom-control-label" for="business-checkbox-2">Option #2</label>
+                    </div>
+                    <div class="badge badge-light-primary">+85</div>
+                  </div>
+                </div>
+                <div class="business-item">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="business-checkbox-3" />
+                      <label class="custom-control-label" for="business-checkbox-3">Option #3</label>
+                    </div>
+                    <div class="badge badge-light-success">+$199</div>
+                  </div>
+                </div>
+                <div class="business-item">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="business-checkbox-4" />
+                      <label class="custom-control-label" for="business-checkbox-4">Option #4</label>
+                    </div>
+                    <div class="badge badge-light-success">+$459</div>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-primary btn-block" rippleEffect>Purchase</button>
+            </div>
+          </div>
+        </div>
+        <!--/ Business Card -->
+
+      </div>
+    </section>
+    <!-- Basic Alerts end -->
+  </div>
+</div>
+
+<ng-template #modalXL let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="myModalLabel160">Book A Pitch</h5>
+    <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body row" tabindex="0" ngbAutofocus>
+    <!-- Payment Card -->
+      <div class="col-lg-12 col-md-12 col-12 mt-2">
+        <div class="card card-payment">
+          <div class="card-header">
+            <h4 class="card-title">Price Per Player</h4>
+            <h4 class="card-title text-primary"><span id="pricePer">0</span> DH</h4>
+          </div>
+          <div class="card-body">
+            <form action="javascript:void(0);" class="form">
+              <div class="row">
+
+                <div class="col-6 col-md-6 col-12">
+                  <div class="form-group mb-2">
+                    <label for="city">City</label>
+                    <select (change)="selectClubs($event)" id="city"  class="form-control">
+                      <option *ngFor="let city of this.cities" value="{{city.name}}">{{city.name}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-6 col-md-6 col-12">
+                  <div class="form-group mb-2">
+                    <label for="club">Club</label>
+                    <select id="club" (change)="selectStads($event)" class="form-control">
+                      <option *ngFor="let club of selectedClubs" value="{{club._id}}">{{club.name}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-6 col-md-6 col-12">
+                  <div class="form-group mb-2">
+                    <label for="stad">Stad</label>
+                    <select id="stad" (change)="changePrice($event)"  class="form-control">
+                      <option *ngFor="let stad of stads" value="{{stad._id}}">{{stad.name}} : {{stad.capacity}} vs {{stad.capacity}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-6 col-md-6 col-12">
+                  <div class="form-group mb-2">
+                    <label for="date">Date</label>
+                   <input type="date" class="form-control" (change)="listSlots($event)"  id="date">
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-12 col-md-12 col-12 mt-2">
+        <div class="card card-payment">
+          <div class="card-body">
+            
+              <div [ngClass]="{'badge-success' : !s.isBooked, 'badge-warning' : s.isBooked && s.isOwner, 'badge-danger' : s.isBooked && !s.isOwner}"  class="badge mb-2 mr-2" style="width: 120px" *ngFor="let s of solObjs">
+                <a target="_blank" (click)="book(s)">
+                  <span [data-feather]="'bookmark'" [class]="'mr-25'"></span>
+                  <span>{{s.slot}}</span>
+                </a>
+              </div>
+  
+          </div>
+        </div>
+      </div>
+      <!--/ Payment Card -->
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="modal.close('Accept click')" rippleEffect>
+      Book
+    </button>
+  </div>
+</ng-template>
